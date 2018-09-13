@@ -1,4 +1,4 @@
-require('./config/config');
+//require('./config/config');
 var env = process.env.NODE_ENV || 'development';
 console.log( 'env *****',env);
 if(env === 'development') {

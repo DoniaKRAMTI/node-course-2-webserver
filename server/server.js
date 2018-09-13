@@ -1,13 +1,5 @@
-var env = process.env.NODE_ENV || 'development';
-console.log( 'env *****',env);
-if(env === 'development') {
-process.env.PORT =3000;
-process.env.MONGODB_URI ='mongodb://localhost:27017/TodoApp';
-}else if (env ==='test') {
-process.env.PORT =3000;
-process.env.MONGODB_URI ='mongodb://localhost:27017/TodoApp';
-}
-//require('./config/config');
+
+require('./config/config');
 const _ = require('lodash');
 const express = require('express');
 const bodyParser = require ('body-parser');
@@ -16,9 +8,10 @@ const {ObjectID} = require ('mongodb');
 var {mongoose} =require ('./db/mongoose');
 var {Todo}= require('./db/models/todo');
 var {User} = require('./db/models/user');
+var {authenticate} = require ('./middleware/authenticate');
 
 var app = express();
-var port = process.env.PORT || 3000;
+const port = process.env.PORT ;
 
 
 app.use(bodyParser.json());
@@ -112,6 +105,10 @@ var user = new User(body);
      res.status(400).send(e);
  })
 
+});
+
+app.get('/users/me',authenticate,(req, res) => {
+  res.send(req.user);
 });
 
 app.listen(port, () => {
